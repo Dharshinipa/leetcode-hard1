@@ -1,0 +1,52 @@
+//Next Smaller Element to the right pattern 
+
+/*for (int i = 0; i < n; i++) {
+            while (!stack.isEmpty() && arr[stack.peek()] > arr[i]) {
+                ans[stack.pop()] = arr[i]; //Next Smaller Element to the right pattern 
+            }
+            stack.push(i);
+}
+
+*/
+import java.util.Stack;
+
+public class Solution {
+
+
+    public int largestRectangleArea(int[] heights) {
+        int maxArea = 0;
+        Stack<Pair> stack = new Stack<>();
+
+        for (int i = 0; i < heights.length; i++) {
+            int start = i;
+            // Pop elements from stack while the current height is less than the height at stack's top
+            while (!stack.isEmpty() && stack.peek().height > heights[i]) {
+                Pair pair = stack.pop();
+                int index = pair.index;
+                int height = pair.height;
+                int length =i-index;
+                maxArea = Math.max(maxArea, height * length);
+                start = index;  // Update start to the index of the popped element
+            }
+            stack.push(new Pair(start, heights[i]));  // Push current index and height as a pair
+        }
+
+        // Process remaining elements in the stack
+        for (Pair pair : stack) {
+            int index = pair.index;
+            int height = pair.height;
+            maxArea = Math.max(maxArea, height * (heights.length - index));
+        }
+
+        return maxArea;
+    }
+    class Pair {
+        int index;
+        int height;
+
+        Pair(int index, int height) {
+            this.index = index;
+            this.height = height;
+        }
+    }
+}
